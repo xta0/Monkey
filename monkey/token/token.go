@@ -17,7 +17,7 @@ const (
 	INT   = "INT"   //12345
 
 	//Operators
-	ASSIGN = ""
+	ASSIGN = "="
 	PLUS   = "+"
 
 	// Delimiters
