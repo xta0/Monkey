@@ -25,6 +25,12 @@ type Identifier struct {
 	Value string
 }
 
+// TokenLiteral implementation
+func (i *Identifier) TokenLiteral() string {
+	return i.Token.Literal
+}
+func (i *Identifier) expressionNode() {}
+
 // Program is the root node of our AST
 type Program struct {
 	Statements []Statement
@@ -38,7 +44,7 @@ func (p *Program) TokenLiteral() string {
 	return ""
 }
 
-// LetStatement xxx
+// LetStatement implements the Statement interface
 type LetStatement struct {
 	Token token.Token
 	Name  *Identifier
