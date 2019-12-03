@@ -1,7 +1,7 @@
 package parser
 
 import (
-	"go/ast"
+	"go/token"
 
 	"../ast"
 	"../lexer"
@@ -55,8 +55,36 @@ func (p *Parser) parseStatement() ast.Statement {
 		return nil
 	}
 }
-func (p *Parser) parseLetToken() ast.Statement {
-	stmt := ast.LetStatement{}
+func (p *Parser) parseLetToken() *ast.LetStatement {
+	stmt := &ast.LetStatement{}
 	stmt.Token = p.curToken
-	return nil
+	if !p.expectedPeek(token.IDENT) {
+		return nil
+	}
+	stmt.Name = &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
+	if !p.expectedPeek(token.ASSIGN) {
+		return nil
+	}
+	//TODO: stmt.Value
+	if !p.currentTokenIs(token.SEMICOLON) {
+		return nil
+	}
+	p.nextToken()
+	return stmt
+}
+
+func (p *Parser) currentTokenIs(t token.TokenType) bool {
+	return p.curToken.Type == t
+}
+
+func (p *Parser) peekTokenIs(t token.TokenType) bool {
+	return p.peekToken.Type == t
+}
+
+func (p *Parser) expectedPeek(t token.TokenType) bool {
+	if !p.peekTokenIs(t) {
+		return false
+	}
+	p.nextToken()
+	return true
 }
